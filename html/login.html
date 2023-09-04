@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Portal Login</title>
+    <!-- Bootstrap CSS link -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f0f0f0;
+        }
+
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .login-container h4 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #007bff;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .form-group input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .form-group input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-muted {
+            color: #888;
+        }
+
+
+
+        .toast {
+
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: #333;
+            transform: translateX(60%);
+
+            color: #fff;
+            border-radius: 8px;
+            display: none;
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out, right 0.5s ease-in-out;
+            background-position: 5px center;
+            background-repeat: no-repeat;
+
+        }
+
+        .toast-icon {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            font-size: 20px;
+        }
+
+        .success {
+            background-color: rgb(10, 236, 97);
+            color: #fff;
+        }
+
+        .error {
+            background-color: rgb(207, 19, 19);
+            color: #fff;
+        }
+
+        .toast.success .toast-icon::before {
+            content: "check_circle";
+        }
+
+        .toast.error .toast-icon::before {
+            content: "cancel";
+        }
+    </style>
+</head>
+
+<body onload="checkSession()">
+
+    <div class="container">
+
+
+        <div class="login-container">
+            <h4>Job Portal Login</h4>
+            <form method="post">
+                <div class="form-group">
+                    <label for="mail">E-Mail:</label>
+                    <input type="text" class="form-control" id="mail" name="mail" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+                <div class="form-group">
+                    <input type="submit" class="btn btn-primary btn-block" value="Login">
+                </div>
+
+            </form>
+            <div class="text-center">
+                <!-- <a href="#">Forgot Password?</a> -->
+                <p class="text-muted">Don't have an account? <a href="./create-applicant.html">Sign Up</a></p>
+            </div>
+        </div>
+
+        <div class="toast" id="toastMessage">
+            <span class="toast-icon material-icons"></span>
+            <span class="toast-text"></span>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS script links -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="../js/Toast.js"></script>
+    <script>
+
+        function checkSession() {
+
+            const userSession = getJWTPayload(localStorage.getItem('token'));
+            if (userSession !== null) {
+                if (userSession.role === "organisation") {
+                    window.location.href = 'org-dashboard.html';
+                } else if (userSession.role === 'applicant') {
+                    window.location.href = 'applicant-landing.html';
+                } else if (userSession.role === 'recruiter') {
+                    window.location.href = 'recruiter-dashboard.html';
+                }
+            }
+        }
+
+        function handleFormSubmit(event) {
+            event.preventDefault(); // Prevent the form from submitting normally
+
+            // Get form input values
+            const email = document.getElementById("mail").value;
+            const password = document.getElementById("password").value;
+
+            // Create an object with the data to be sent in the request body
+            const data = {
+                email: email,
+                password: password
+            };
+            let token1;
+            // Configure the Fetch API to make a POST request to the API endpoint
+            fetch("http://localhost:8081/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data) // Convert the data object to JSON string
+            })
+                .then(result => {
+                    if (result.ok) {
+                        result.text().then(token => {
+                            localStorage.setItem('token', token);
+                        });
+                        const userSession = getJWTPayload(localStorage.getItem('token'));
+                        if (userSession !== null) {
+                            if (userSession.role === "organisation") {
+                                window.location.href = 'org-dashboard.html'
+                            } else if (userSession.role === 'applicant') {
+                                window.location.href = 'applicant-landing.html'
+                            } else if (userSession.role === 'recruiter') {
+                                window.location.href = 'recruiter-dashboard.html'
+                            }
+                        }
+                    } else {
+                        showToast("Invalid Username or Passowrd", "error");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
+        }
+
+        const loginForm = document.querySelector('form');
+        loginForm.addEventListener("submit", handleFormSubmit);
+
+        function getJWTPayload(jwt) {
+            const [, payloadBase64] = jwt.split('.'); // Ignore header and signature
+            const payload = JSON.parse(atob(payloadBase64));
+            return payload;
+        }
+
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Applicant Details Form</title>
+    <!-- Bootstrap CSS link -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f8f8f8;
+            padding-top: 50px;
+        }
+        .gender{
+            margin-top: 40px;
+        }
+
+        .container {
+            max-width: 600px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group label {
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+        .org-account-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .go-back-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 5px 10px; /* Add padding to the button */
+            display: flex; /* Use flex to align icon and text */
+            align-items: center; /* Center icon and text vertically */
+        }
+
+        .material-icons {
+            margin-right: 5px; /* Add some space between the icon and text */
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <button type="button" class="btn btn-primary go-back-btn" onclick="goBack()">
+            <i class="material-icons">arrow_back</i>
+            Go Back
+        </button>
+        <button type="button" class="btn btn-primary org-account-btn" id="orgBtn">Organisation account</button>
+        <h4 class="text-center mb-4">Applicant Details Form</h4>
+        <form id="applicantForm" method="post">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="username">Username:</label>
+                    <input type="text" class="form-control" id="username" name="username" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="password">Password:</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="fname">First Name:</label>
+                    <input type="text" class="form-control" id="fname" name="fname" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="name">Last Name:</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="dob">Date of birth:</label>
+                    <input type="date" class="form-control" id="dob" name="dob" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="loc">Location:</label>
+                    <input type="text" class="form-control" id="loc" name="loc" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="email">Email:</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="org">Current Org:</label>
+                    <input type="text" class="form-control" id="org" name="org" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="mob">Mobile:</label>
+                    <input type="number" class="form-control" id="mob" name="mob" required>
+                </div>
+                <div class="form-group col-md-6 gender">
+                    <label>Gender:</label>
+                    <div class="form-check form-check-inline">
+                        <label class="form-check-label" for="male">Male</label>
+                        <input type="radio" class="form-check-input" id="male" name="gender" value="Male" required>
+
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <label class="form-check-label" for="female">Female</label>
+                        <input type="radio" class="form-check-input" id="female" name="gender" value="Female" required>
+
+                    </div>
+                </div>
+            </div>
+            <div class="text-center">
+                <button type="submit" id="submitBtn" class="btn btn-primary">Submit</button>
+            </div>
+            <div class="text-center">
+                <p class="text-muted">Already have an account? <a href="./login.html">login</a></p>
+            </div>
+        </form>
+    </div>
+
+
+<!-- Bootstrap JS script links -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script> -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+     document.getElementById('orgBtn').addEventListener('click',handleEvent);
+       function handleEvent(){
+            window.location.href='create-organisation.html'
+        }
+        function goBack(){
+            window.location.href='login.html'
+
+        }
+
+
+ function postData(url, data) {
+        let res;
+        return fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+        
+    }
+
+    document.getElementById('applicantForm').addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent the default form submission behavior
+
+        // Get form values
+                const userId = 12345 ;
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const name =document.getElementById('name').value;
+            const fName =document.getElementById('fname').value;
+            const dob =document.getElementById('dob').value;
+            const location =document.getElementById('loc').value;
+            const email =document.getElementById('email').value;
+            const mobile =parseInt(document.getElementById('mob').value);
+            const currentOrg =document.getElementById('org').value;
+            const gender=document.querySelector('input[name="gender"]:checked').value;
+
+        // Prepare the data object
+        const formData = {
+            username: username,
+            password: password,
+            name:name,
+            fName:fName,
+            dob:dob,
+            location:location,
+            email: email,
+            mobile:mobile,
+            currentOrg:currentOrg,
+            gender:gender,
+        };
+
+        // Post the data to the API endpoint
+        postData('http://localhost:8081/applicants', formData)
+            .then((res) => {
+                if(res.ok)
+                alert('Form data submitted successfully!');
+                window.location.href='login.html'
+            }).catch((err)=>{
+                console.log(err);
+            });
+    });
+
+   
+</script>
+
+</body>
+</html>

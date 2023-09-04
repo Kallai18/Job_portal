@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <title>Job Listings</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      padding: 1rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      grid-gap: 1rem;
+    }
+
+    .job-card {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      padding: 1rem;
+      background-color: #f9f9f9;
+    }
+
+    .job-title {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    .job-company {
+      color: #666;
+      margin-bottom: 0.5rem;
+    }
+
+    .job-description {
+      height: 6em;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+
+    .job-apply-btn {
+      display: block;
+      background-color: #007BFF;
+      color: #fff;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      text-align: center;
+      transition: background-color 0.3s;
+    }
+
+    .job-apply-btn:hover {
+      background-color: #0056b3;
+    }
+
+    .user-info {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #f9f9f9;
+      min-width: 120px;
+      z-index: 1;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    .dropdown-content a {
+      display: block;
+      padding: 8px 12px;
+      text-decoration: none;
+      color: #333;
+    }
+
+    .dropdown-content a:hover {
+      background-color: #f1f1f1;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    .search-box {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .search-input {
+      padding: 0.5rem;
+      width: 60%;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+
+    .search-btn {
+      background-color: #007BFF;
+      color: #fff;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    .dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 180px; 
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  right: 0;
+  text-align: left; 
+}
+
+.dropdown-content a {
+  display: block;
+  padding: 8px 12px;
+  text-decoration: none;
+  color: #333;
+}
+
+.dropdown-content i {
+  margin-right: 8px;
+}
+
+.toast {
+
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 10px 20px;
+  background-color: #333;
+  transform: translateX(60%);
+
+  color: #fff;
+  border-radius: 8px;
+  display: none;
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out, right 0.5s ease-in-out;
+  background-position: 5px center;
+  background-repeat: no-repeat;
+
+}
+
+.toast-icon {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  font-size: 20px;
+}
+.success{
+  background-color: rgb(10, 236, 97);
+  color: #fff;
+}
+.error{
+  background-color: rgb(207, 19, 19);
+  color: #fff;
+}
+
+/* Tick icon for success messages */
+.toast.success .toast-icon::before {
+  content: "check_circle"; /* Material Icons code for the tick icon */
+}
+
+/* X icon for error messages */
+.toast.error .toast-icon::before {
+  content: "cancel"; /* Material Icons code for the x icon */
+}
+
+
+
+
+  </style>
+</head>
+
+<body onload="getLoadDetails()">
+  <header>
+    <div class="user-info dropdown">
+      <i class="fas fa-user"></i> <span id="userName"> User</span>
+      <div class="dropdown-content">
+        <a href="#"><i class="fas fa-user-cog"></i> Profile Settings</a>
+        <a href="#" id="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      </div>
+    </div>
+    <h1>Job Listings</h1>
+    <div class="search-box">
+      <input type="text" class="search-input" placeholder="Search jobs...">
+    </div>
+  </header>
+  <div class="toast" id="toastMessage">
+    <span class="toast-icon material-icons"></span>
+    <span class="toast-text"></span>
+  </div>
+
+  <div class="container" id="jobContainer">
+  </div>
+
+
+  <script src="/js/applicant.js"></script>
+</body>
+
+
+</html>

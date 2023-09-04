@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Job Posting Form</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+          body {
+              background-color: #f8f8f8;
+              padding-top: 50px;
+          }
+  
+          .container {
+              max-width: 600px;
+              background-color: #fff;
+              border: 1px solid #ddd;
+              border-radius: 5px;
+              padding: 20px;
+              box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+              margin: 0 auto; /* Center the container horizontally */
+          }
+  
+          .form-group label {
+              font-weight: bold;
+          }
+  
+          .btn-primary {
+              background-color: #007bff;
+              border-color: #007bff;
+              color: #fff; /* Add text color for better visibility */
+              transition: background-color 0.2s, border-color 0.2s;
+          }
+  
+          .btn-primary:hover {
+              background-color: #0056b3;
+              border-color: #0056b3;
+          }
+  
+          .go-back-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 5px 10px; /* Add padding to the button */
+            display: flex; /* Use flex to align icon and text */
+            align-items: center; /* Center icon and text vertically */
+        }
+  
+          .go-back-btn:hover {
+            background-color: #0056b3;
+          }
+
+          .go-back-btn:active {
+            background-color: #0056b3; /* A slightly darker shade of the button color on click */
+          }
+          .material-icons {
+            margin-right: 5px; /* Add some space between the icon and text */
+        }
+      </style>
+  </head>
+  <body>
+      <div class="container">
+           <!-- Go back button -->
+          <button type="button" class="btn btn-primary go-back-btn" onclick="goBack()">
+              <i class="material-icons"></i>
+              Go Back
+          </button>
+  
+          <h4 class="text-center mb-4">Job Posting Form</h4>
+
+          <form id="addJobsForm">
+              <div class="form-group">
+                  <label for="jobTitle">Job Title:</label>
+                  <input type="text" class="form-control" id="jobTitle" required>
+              </div>
+              <div class="form-group">
+                  <label for="description">Description:</label>
+                  <textarea class="form-control" id="description" rows="3" required></textarea>
+              </div>
+              <div class="form-group">
+                  <label for="exRangeMin">Experience Range (Min):</label>
+                  <input type="number" class="form-control" id="exRangeMin" required>
+              </div>
+              <div class="form-group">
+                  <label for="exRangeMax">Experience Range (Max):</label>
+                  <input type="number" class="form-control" id="exRangeMax" required>
+              </div>
+              <div class="form-group">
+                  <label for="active">Active:</label>
+                  <select class="form-select" id="active" required>
+                      <option value="true">Yes</option>
+                      <option value="false">No</option>
+                  </select>
+              </div>
+          
+              <div class="text-center">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+              </div>
+          </form>
+      </div>
+  </body>
+  </html>
+  
+  <script >
+    function goBack(){
+            window.location.href='recruiter-dashboard.html'
+        }
+
+        function postData(url, data) {
+        let res;
+        return fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+            
+        });
+        
+    }
+    
+    document.getElementById('addJobsForm').addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent the default form submission behavior
+
+    //     const token = localStorage.getItem('token');
+    //   const userSession = getJWTPayload(token);
+    //   const postedBy = userSession.userName;
+
+
+        // Get form values
+        const jobTitle =document.getElementById("jobTitle").value;
+        const description =document.getElementById("description").value;
+        const exRangeMin =parseInt(document.getElementById("exRangeMin").value);
+        const exRangeMax =parseInt(document.getElementById("exRangeMax").value);
+        const active =true;
+      
+        
+        // Prepare the data object
+        const jobData = {
+                // postedBy: postedBy,
+                jobTitle: jobTitle,
+                description: description,
+                exRangeMin: exRangeMin,
+                exRangeMax: exRangeMax,
+                active: true,
+             };  
+
+// Function to add a new job 
+    postData('http://localhost:8081/jobs', jobData)
+    .then((res) => {
+        if (res.ok) {
+                    alert('Job added successfully');
+                    showToastMessage("Job added successfully!", "success");
+                    window.location.href = 'recruiter-dashboard.html';
+                } else {
+                    console.log(res.statusText);
+                    showToastMessage("Error adding job. Please try again later.", "error");
+                }
+            }).catch((err) => {
+                console.log(err);
+                showToastMessage("Error adding job. Please try again later.", "error");
+            });
+            
+    //         function getJWTPayload(jwt) {
+    //   const [, payloadBase64] = jwt.split('.'); // Ignore header and signature
+    //   const payload = JSON.parse(atob(payloadBase64));
+    //   return payload;
+    // }
+
+// Function to show toast message
+function showToastMessage(message, type) {
+  // Create and display a toast message
+  const toast = document.createElement("div");
+  toast.classList.add("toast", `toast-${type}`);
+  toast.textContent = message;
+  document.body.appendChild(toast);
+
+  setTimeout(() => {
+    toast.remove();
+  }, 3000);
+}
+
+const addJobsForm = document.getElementById("addJobsForm");
+  addJobsForm.reset();
+});        
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

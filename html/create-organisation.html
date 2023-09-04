@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Organization Details Form</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <style>
+        /* Additional custom styling */
+        body {
+            background-color: #f8f8f8;
+            padding-top: 50px;
+        }
+
+        .container {
+            max-width: 600px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group label {
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+        /* Custom styles for the "Organisation account" button */
+        .org-account-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .go-back-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 5px 10px; /* Add padding to the button */
+            display: flex; /* Use flex to align icon and text */
+            align-items: center; /* Center icon and text vertically */
+        }
+
+        .material-icons {
+            margin-right: 5px; /* Add some space between the icon and text */
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+<!-- Go back button -->
+<button type="button" class="btn btn-primary go-back-btn" onclick="goBack()">
+    <i class="material-icons">arrow_back</i>
+    Go Back
+</button>
+        <!-- Organisation account button -->
+        <!-- <button type="button" class="btn btn-primary org-account-btn" id="recBtn">Recruiters account</button> -->
+
+        <h4 class="text-center mb-4">Organization Details Form</h4>
+        <form id="orgDetailsForm">
+            <div class="form-group">
+                <label for="userName">Username:</label>
+                <input type="text" class="form-control" id="userName" name="userName" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="organisationName">Organization Name:</label>
+                <input type="text" class="form-control" id="organisationName" name="organisationName" required>
+            </div>
+            <div class="form-group">
+                <label for="category">Category:</label>
+                <input type="text" class="form-control" id="category" name="category" required>
+            </div>
+        
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+    
+        function goBack(){
+            window.location.href='login.html'
+        }
+
+
+
+        // To male API Call
+
+
+        function postData(url, data) {
+        let res;
+        return fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+        
+    }
+
+    document.getElementById('orgDetailsForm').addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent the default form submission behavior
+
+
+        // Get form values
+        const userName = document.getElementById('userName').value;
+        const password = document.getElementById('password').value;
+        const email = document.getElementById('email').value;
+        const organisationName = document.getElementById('organisationName').value;
+        const category = document.getElementById('category').value;
+
+        // Prepare the data object
+        const formData = {
+            userName: userName,
+            password: password,
+            email: email,
+            organisationName: organisationName,
+            category: category,
+        };
+
+        // Post the data to the API endpoint
+        postData('http://localhost:8081/organisation', formData)
+            .then((res) => {
+                if(res.ok)
+                alert('Form data submitted successfully!');
+                window.location.href='login.html'
+            }).catch((err)=>{
+                console.log(err);
+            });
+    });
+    </script>
+</body>
+</html>
